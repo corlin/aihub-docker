@@ -15,3 +15,6 @@ apt-get install -y --no-install-recommends \
 		fontconfig libfreetype6 \
 		ca-certificates p11-kit \
 		;
+
+https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_8u302b08.tar.gz
+https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_8u302b08.tar.gz.sign

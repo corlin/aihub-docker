@@ -1,6 +1,7 @@
 FROM python:3.8-buster
 # 更新为清华源
 ADD sources.list /etc/apt/
+ADD openjdk.tgz /root/
 # set -eux 执行方式修改，打印命令，失败退出
 RUN set -eux; \
 	apt-get update; \
@@ -21,28 +22,17 @@ ENV JAVA_VERSION 8u302
 # https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
 
 RUN set -eux; \
-	\
+	pwd;\
 	arch="$(dpkg --print-architecture)"; \
 	downloadUrl='https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_8u302b08.tar.gz'; \
-	wget --progress=dot:giga -O openjdk.tgz "$downloadUrl"; \
-	wget --progress=dot:giga -O openjdk.tgz.asc "$downloadUrl.sign"; \
-	\
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver keyserver.ubuntu.com --recv-keys EAC843EBD3EFDB98CC772FADA5CD6035332FA671; \
-	gpg --batch --keyserver keyserver.ubuntu.com --keyserver-options no-self-sigs-only --recv-keys CA5F11C6CE22644D42C6AC4492EF8D39DC13168F; \
-	gpg --batch --list-sigs --keyid-format 0xLONG CA5F11C6CE22644D42C6AC4492EF8D39DC13168F \
-		| tee /dev/stderr \
-		| grep '0xA5CD6035332FA671' \
-		| grep 'Andrew Haley'; \
-	gpg --batch --verify openjdk.tgz.asc openjdk.tgz; \
-	gpgconf --kill all; \
-	rm -rf "$GNUPGHOME"; \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract \
 		--file openjdk.tgz \
 		--directory "$JAVA_HOME" \
 	; \
 	rm openjdk.tgz*; \
+    env;\
+    ls -ltr /usr/local/openjdk-8/bin;\
 	{ \
 		echo '#!/usr/bin/env bash'; \
 		echo 'set -Eeuo pipefail'; \
