@@ -1,7 +1,7 @@
 FROM python:3.8-buster
 # 更新为清华源
-ADD sources.list /etc/apt/
-ADD openjdk.tgz /root/
+COPY sources.list /etc/apt/
+COPY openjdk.tgz /root/
 # set -eux 执行方式修改，打印命令，失败退出
 RUN set -eux; \
 	apt-get update; \
@@ -22,16 +22,26 @@ ENV JAVA_VERSION 8u302
 # https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
 
 RUN set -eux; \
-	pwd;\
-	arch="$(dpkg --print-architecture)"; \
-	downloadUrl='https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_8u302b08.tar.gz'; \
+	#pwd; \
+    #whoami; \
+    #id ; \
+    #apt-get install mlocate -y; \
+    #updatedb; \
+    #locate openjdk.tgz; \
+    ls /root/ ; \
+	ls /root/openjdk.tgz; \
+    arch="$(dpkg --print-architecture)"; \
+	#downloadUrl='https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/download/jdk8u302-b08/OpenJDK8U-jdk_x64_linux_8u302b08.tar.gz'; \
 	mkdir -p "$JAVA_HOME"; \
+    ls "$JAVA_HOME"; \
 	tar --extract \
-		--file openjdk.tgz \
+		--file /root/openjdk.tgz  \
+        --strip-components 1 \
 		--directory "$JAVA_HOME" \
 	; \
-	rm openjdk.tgz*; \
-    env;\
+    ls "$JAVA_HOME"; \
+	rm /root/openjdk.tgz; \
+    env; \
     ls -ltr /usr/local/openjdk-8/bin;\
 	{ \
 		echo '#!/usr/bin/env bash'; \
