@@ -1,1 +1,6 @@
 /py-java/openjdk.tgz
+/py-flink/jar/*
+/pyalink0.1.tar.gz
+/py-flink/flink-1.13.1-bin-scala_2.11.tgz
+/py-flink/flink-1.13.1-bin-scala_2.11.tgz.asc
+/pyalink/pyalink-1.4.0-py3-none-any.whl

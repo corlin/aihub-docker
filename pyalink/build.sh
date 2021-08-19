@@ -26,9 +26,9 @@ docker run \
 
 docker run \
     --rm \
-    --name=taskmanager \
+    --name=taskmanager1 \
     --network flink-network \
     --env FLINK_PROPERTIES="${FLINK_PROPERTIES}" \
-    corlin/py-flink:latest taskmanager
+    corlin/pyalink:latest taskmanager
 docker ps|grep pyalink
 docker exec -it c0916e0935a0 /bin/bash
