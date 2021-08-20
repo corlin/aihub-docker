@@ -8,4 +8,5 @@ RUN set -eux; \
     conda config --set show_channel_urls yes ;\
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple ; \
     pip install /tmp/pyalink-1.4.0-py3-none-any.whl ; \
-    pip install xgboost==1.1.1 ;
+    pip install xgboost==1.1.1;
+USER root
