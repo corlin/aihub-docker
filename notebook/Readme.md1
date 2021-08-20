@@ -1,0 +1,15 @@
+docker build -t corlin/notebook .
+docker tag  corlin/notebook  corlin/notebook:py3
+docker push  corlin/notebook
+docker push  corlin/notebook:py3
+docker rmi  corlin/notebook:py3
+docker rmi  corlin/notebook
+
+docker pull  corlin/notebook:py3
+docker run \
+--rm \
+--name=jupyter \
+--publish 8888:8888 \
+corlin/jupyter:latest
+
+docker exec -it cb8ca3d77934 /bin/bash
