@@ -10,7 +10,7 @@ ARG ROOT_CONTAINER=ubuntu:focal
 FROM $ROOT_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-ARG NB_USER="jovyan"
+ARG NB_USER="aihub"
 ARG NB_UID="1000"
 ARG NB_GID="100"
 
@@ -26,9 +26,9 @@ COPY sources.list /etc/apt/
 # (ARGS are in lower case to distinguish them from ENV)
 # Check https://github.com/conda-forge/miniforge/releases
 # Conda version
-ARG conda_version="4.10.3"
+ARG conda_version="4.10.0"
 # Miniforge installer patch version
-ARG miniforge_patch_number="3"
+ARG miniforge_patch_number="0"
 # Package Manager and Python implementation to use (https://github.com/conda-forge/miniforge)
 # - conda only: either Miniforge3 to use Python or Miniforge-pypy3 to use PyPy
 # - conda + mamba: either Mambaforge to use Python or Mambaforge-pypy3 to use PyPy
