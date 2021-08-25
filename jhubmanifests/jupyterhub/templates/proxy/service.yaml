@@ -1,0 +1,41 @@
+---
+# Source: jupyterhub/templates/proxy/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-api
+  labels:
+    component: proxy-api
+    app: jupyterhub
+    release: jhub
+    chart: jupyterhub-1.1.2
+    heritage: Helm
+spec:
+  selector:
+    component: proxy
+    app: jupyterhub
+    release: jhub
+  ports:
+    - port: 8001
+      targetPort: api
+---
+# Source: jupyterhub/templates/proxy/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-public
+  labels:
+    component: proxy-public
+    app: jupyterhub
+    release: jhub
+    chart: jupyterhub-1.1.2
+    heritage: Helm
+spec:
+  selector:
+    component: proxy
+    release: jhub
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  type: LoadBalancer

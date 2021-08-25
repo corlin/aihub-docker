@@ -1,0 +1,88 @@
+---
+# Source: jupyterhub/templates/scheduling/user-scheduler/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-scheduler
+  labels:
+    component: user-scheduler
+    app: jupyterhub
+    release: jhub
+    chart: jupyterhub-1.1.2
+    heritage: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: user-scheduler
+      app: jupyterhub
+      release: jhub
+  template:
+    metadata:
+      labels:
+        component: user-scheduler
+        app: jupyterhub
+        release: jhub
+      annotations:
+        checksum/config-map: e8c085e12ddfa8a20523e2d9db712c55b1d73c96ffd69690977a01939b04598f
+    spec:
+      serviceAccountName: user-scheduler
+      nodeSelector: {}
+      tolerations:
+        - effect: NoSchedule
+          key: hub.jupyter.org/dedicated
+          operator: Equal
+          value: core
+        - effect: NoSchedule
+          key: hub.jupyter.org_dedicated
+          operator: Equal
+          value: core
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: hub.jupyter.org/node-purpose
+                    operator: In
+                    values: [core]
+      volumes:
+        - name: config
+          configMap:
+            name: user-scheduler
+      containers:
+        - name: kube-scheduler
+          image: k8s.gcr.io/kube-scheduler:v1.19.13
+          command:
+            - /usr/local/bin/kube-scheduler
+            # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)
+            #       flags are silently ignored in favor of whats defined in the
+            #       passed KubeSchedulerConfiguration whenever --config is
+            #       passed.
+            #
+            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
+            #
+            # NOTE: --authentication-skip-lookup=true is used to avoid a
+            #       seemingly harmless error, if we need to not skip
+            #       "authentication lookup" in the future, see the linked issue.
+            #
+            # ref: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1894
+            - --config=/etc/user-scheduler/config.yaml
+            - --authentication-skip-lookup=true
+            - --v=4
+          volumeMounts:
+            - mountPath: /etc/user-scheduler
+              name: config
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 10251
+            initialDelaySeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 10251
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsGroup: 65534
+            runAsUser: 65534

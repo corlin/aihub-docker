@@ -1,0 +1,26 @@
+---
+# Source: jupyterhub/templates/hub/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub
+  labels:
+    component: hub
+    app: jupyterhub
+    release: jhub
+    chart: jupyterhub-1.1.2
+    heritage: Helm
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /hub/metrics
+    prometheus.io/port: "8081"
+spec:
+  type: ClusterIP
+  selector:
+    component: hub
+    app: jupyterhub
+    release: jhub
+  ports:
+    - name: hub
+      port: 8081
+      targetPort: http
