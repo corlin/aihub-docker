@@ -4,3 +4,9 @@
 /py-flink/flink-1.13.1-bin-scala_2.11.tgz
 /py-flink/flink-1.13.1-bin-scala_2.11.tgz.asc
 /pyalink/pyalink-1.4.0-py3-none-any.whl
+.idea/modules.xml
+.idea/misc.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/aihub-docker.iml
+.idea/aihub-docker.iml
+.idea/inspectionProfiles/profiles_settings.xml
